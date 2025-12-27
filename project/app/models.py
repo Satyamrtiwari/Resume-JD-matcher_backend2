@@ -18,7 +18,7 @@ class Resume(models.Model):
     candidate_name = models.CharField(max_length=200)
     resume_file = models.FileField(upload_to='resumes/')
     text = models.TextField()
-    embedding = models.JSONField()
+    embedding = models.JSONField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
