@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual env
+resume_ml/
+venv/
+
+# Django
+db.sqlite3
+staticfiles/
+
+# OS
+.env
