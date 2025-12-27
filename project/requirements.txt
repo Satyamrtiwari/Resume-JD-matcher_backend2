@@ -1,18 +1,20 @@
-Django==5.2.9
+﻿Django==5.2.9
 djangorestframework==3.16.1
 djangorestframework_simplejwt==5.5.1
 django-cors-headers==4.9.0
 
-gunicorn
-whitenoise
-dj-database-url
-python-dotenv
 
+gunicorn==21.2.0
+whitenoise==6.7.0
+dj-database-url==1.0.0
+python-dotenv==1.0.1
+
+requests
 numpy
 scikit-learn
 scipy
-torch
-sentence-transformers
-transformers
 pypdf
 joblib
+psycopg2-binary
+
+
