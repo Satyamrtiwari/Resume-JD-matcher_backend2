@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -90,7 +91,6 @@ REST_FRAMEWORK = {
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-import os
 import dj_database_url
 
 if os.environ.get("DATABASE_URL"):
