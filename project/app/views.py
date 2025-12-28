@@ -1,10 +1,11 @@
 from django.shortcuts import render
-from rest_framework.generics import CreateAPIView, ListAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView , DestroyAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404  
 
 from .models import JobDescription, Resume, MatchResult
 from .serializers import (
@@ -170,3 +171,26 @@ class MatchHistoryView(ListAPIView):
             })
 
         return Response(data)
+    
+
+# for deleting a uploaded job description
+class JobDescriptionDeleteView(DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return JobDescription.objects.filter(user=self.request.user)
+    
+#for deleting a uploaded resume
+class ResumeDeleteView(DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Resume.objects.filter(user=self.request.user)
+
+    def perform_destroy(self, instance):
+        # delete file from storage
+        if instance.resume_file:
+            instance.resume_file.delete(save=False)
+        instance.delete()
+
+    
