@@ -23,9 +23,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-kh%ds&2qanta4oe(f(v4v6yxgdwjiei8wn9+(11+v7s#0mvguh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    "resume-jd-matcher-backend-2.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
+
 
 
 
