@@ -151,7 +151,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
-    "https://dainty-dusk-04c0c4.netlify.app",
+    "https://resume-jb-matcher-satyam.netlify.app",
     "http://localhost:3000",
     #for react + vite
     "http://localhost:5173",
