@@ -12,6 +12,9 @@ An AI-powered full-stack application that evaluates semantic similarity between 
 ## 🌐 Live Demo
 👉 [https://your-link.com](https://resume-jb-matcher-satyam1.netlify.app/)
 
+## 🎥 Demo
+![Demo](demo.gif)
+
 ## 📌 Overview
 
 Resume-JD Matcher helps recruiters and candidates quickly assess compatibility by analyzing resumes against job descriptions using advanced NLP models from HuggingFace.
