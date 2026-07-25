@@ -161,7 +161,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
     "https://dainty-dusk-04c0c4.netlify.app",
-    "https://resume-jd-matcher-backend-2.onrender.com",
+    "https://resume-jd-matcher-backend2.onrender.com",
     "http://localhost:5173",
     "http://localhost:3000",
 ]
