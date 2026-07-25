@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-kh%ds&2qanta4oe(f(v4v6yxgdwjiei8wn9+(11+v7s#0mvguh
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = [
-    "resume-jd-matcher-backend-2.onrender.com",
+    "resume-jd-matcher-backend2.onrender.com",
     "localhost",
     "127.0.0.1",
 ]
@@ -165,7 +165,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
     "https://dainty-dusk-04c0c4.netlify.app",
-    "https://resume-jd-matcher-backend-2.onrender.com",
+    "https://resume-jd-matcher-backend2.onrender.com",
     "http://localhost:5173",
     "http://localhost:3000",
 ]
