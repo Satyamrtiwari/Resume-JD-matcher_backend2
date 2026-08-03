@@ -7,9 +7,11 @@ from .views import (
     ResumeListView,
     ResumeDeleteView,
     MatchResumeView,
+    health_check,
 )
 
 urlpatterns = [
+    path("health/", health_check, name="health-check"),
     path("jobs/", JobDescriptionCreateView.as_view(), name="job-create"),
     path("jobs/list/", JobDescriptionListView.as_view(), name="job-list"),
     path("jobs/<int:pk>/", JobDescriptionDeleteView.as_view(), name="job-delete"),
