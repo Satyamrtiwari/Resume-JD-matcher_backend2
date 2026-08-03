@@ -7,14 +7,14 @@ from django.contrib.auth.models import User
 
 
 class JobDescription(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     job_title = models.CharField(max_length=200)
     job_description = models.TextField()
     embedding = models.JSONField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)   
 
 class Resume(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     candidate_name = models.CharField(max_length=200)
     resume_file = models.FileField(upload_to='resumes/')
     text = models.TextField()

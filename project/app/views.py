@@ -1,34 +1,17 @@
 from django.shortcuts import render
-from rest_framework.generics import CreateAPIView, ListAPIView , DestroyAPIView
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.generics import CreateAPIView, ListAPIView, DestroyAPIView
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework_simplejwt.views import TokenObtainPairView
-from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404  
 
 from .models import JobDescription, Resume, MatchResult
 from .serializers import (
-    RegisterSerializer,
     JobDescriptionSerializer,
     ResumeUploadSerializer,
     MatchRequestSerializer,
 )
 from app.services import get_similarity_from_hf
-
-
-# =========================
-# AUTH
-# =========================
-
-class LoginView(TokenObtainPairView):
-    permission_classes = [AllowAny]
-
-
-class RegisterView(CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = RegisterSerializer
-    permission_classes = [AllowAny]
 
 
 # =========================
@@ -38,18 +21,26 @@ class RegisterView(CreateAPIView):
 class JobDescriptionCreateView(CreateAPIView):
     queryset = JobDescription.objects.all()
     serializer_class = JobDescriptionSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        user = self.request.user if self.request.user.is_authenticated else None
+        serializer.save(user=user)
 
 
 class JobDescriptionListView(ListAPIView):
     serializer_class = JobDescriptionSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
-        return JobDescription.objects.filter(user=self.request.user)
+        return JobDescription.objects.all()
+
+
+class JobDescriptionDeleteView(DestroyAPIView):
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        return JobDescription.objects.all()
 
 
 # =========================
@@ -59,7 +50,7 @@ class JobDescriptionListView(ListAPIView):
 class ResumeUploadView(CreateAPIView):
     queryset = Resume.objects.all()
     serializer_class = ResumeUploadSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
         resume_file = self.request.FILES.get("resume_file")
@@ -72,18 +63,31 @@ class ResumeUploadView(CreateAPIView):
         full_text = extract_text_from_pdf(resume_file)
         clean_text = extract_relevant_resume_text(full_text)
 
+        user = self.request.user if self.request.user.is_authenticated else None
         serializer.save(
-            user=self.request.user,
+            user=user,
             text=clean_text,
         )
 
 
 class ResumeListView(ListAPIView):
     serializer_class = ResumeUploadSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
-        return Resume.objects.filter(user=self.request.user)
+        return Resume.objects.all()
+
+
+class ResumeDeleteView(DestroyAPIView):
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        return Resume.objects.all()
+
+    def perform_destroy(self, instance):
+        if instance.resume_file:
+            instance.resume_file.delete(save=False)
+        instance.delete()
 
 
 # =========================
@@ -93,7 +97,7 @@ class ResumeListView(ListAPIView):
 class MatchResumeView(CreateAPIView):
     queryset = MatchResult.objects.all()
     serializer_class = MatchRequestSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -137,60 +141,5 @@ class MatchResumeView(CreateAPIView):
             status=status.HTTP_201_CREATED,
         )
 
-
-# =========================
-# HISTORY
-# =========================
-
-class MatchHistoryView(ListAPIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        matches = MatchResult.objects.filter(
-            job__user=request.user
-        ).select_related("job", "resume")
-
-        data = []
-        for m in matches:
-            score_percent = round(m.score * 100, 2)
-
-            if m.score >= 0.75:
-                verdict = "Strong Match"
-            elif m.score >= 0.5:
-                verdict = "Moderate Match"
-            else:
-                verdict = "Low Match"
-
-            data.append({
-                "id": m.id,
-                "job_title": m.job.job_title,
-                "candidate_name": m.resume.candidate_name,
-                "score_percent": score_percent,
-                "verdict": verdict,
-                "created_at": m.created_at,
-            })
-
-        return Response(data)
-    
-
-# for deleting a uploaded job description
-class JobDescriptionDeleteView(DestroyAPIView):
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return JobDescription.objects.filter(user=self.request.user)
-    
-#for deleting a uploaded resume
-class ResumeDeleteView(DestroyAPIView):
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return Resume.objects.filter(user=self.request.user)
-
-    def perform_destroy(self, instance):
-        # delete file from storage
-        if instance.resume_file:
-            instance.resume_file.delete(save=False)
-        instance.delete()
 
     
