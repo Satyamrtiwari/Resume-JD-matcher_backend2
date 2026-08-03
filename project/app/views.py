@@ -4,6 +4,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404  
+from rest_framework.decorators import api_view, permission_classes
 
 from .models import JobDescription, Resume, MatchResult
 from .serializers import (
@@ -142,9 +143,9 @@ class MatchResumeView(CreateAPIView):
         )
 
 
-from rest_framework.decorators import api_view, permission_classes
 
-@api_view(['GET'])
+
+@api_view(['GET', 'HEAD'])
 @permission_classes([AllowAny])
 def health_check(request):
     return Response({"status": "ok"})
