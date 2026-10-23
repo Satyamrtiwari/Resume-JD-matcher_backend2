@@ -1,0 +1,28 @@
+databases:
+  - name: resume-jd-db
+    plan: free
+    databaseName: resume_jd_db
+    user: resume_jd_user
+
+services:
+  - type: web
+    name: resume-jd-matcher-backend
+    runtime: python
+    plan: free
+    rootDir: project
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+      python manage.py migrate
+    startCommand: gunicorn project.wsgi:application
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: resume-jd-db
+          property: connectionURI
+      - key: DEBUG
+        value: "False"
+      - key: PYTHON_VERSION
+        value: "3.13.0"
+      - key: SECRET_KEY
+        generateValue: true
