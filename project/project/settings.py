@@ -116,6 +116,7 @@ STORAGES = {
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
+    "https://dainty-dusk-04c0c4.netlify.app",
     "https://resume-jb-matcher-satyam1.netlify.app",
     "http://localhost:3000",
     "http://localhost:5173",
@@ -124,6 +125,7 @@ CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
+    "https://dainty-dusk-04c0c4.netlify.app",
     "https://resume-jb-matcher-satyam1.netlify.app",
     "https://resume-jd-matcher-backend-cvf2.onrender.com",
     "http://localhost:5173",
